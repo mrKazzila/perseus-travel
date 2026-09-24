@@ -1,0 +1,128 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { ageLabel } from '../data/profile';
+import { withBase } from '../utils/paths';
+const { content: c } = Astro.props;
+const gallery = c.gallery.images.map((item: any) => ({ ...item, src: withBase(item.src) }));
+const navIds = ['about', 'apartment', 'health', 'travels', 'landlords'];
+const setupIcons = ['carrier', 'tray', 'scratch', 'toys', 'blanket', 'camera'];
+const iconPaths: Record<string, string> = {
+  carrier: 'M5 9h14v10H5zM8 9V6h8v3M9 13h6M9 16h6',
+  tray: 'M4 14h16l-2 5H6zM8 11c1-2 2-3 4-3s3 1 4 3',
+  scratch: 'M8 20h8M10 20V6h4v14M8 6h8M7 4h10',
+  toys: 'M12 4a8 8 0 1 0 0 16 8 8 0 0 0 0-16M7 6c6 2 4 10 10 12M5 15c4-6 10-2 14-6',
+  blanket: 'M5 5h12a2 2 0 0 1 2 2v12H7a2 2 0 0 1-2-2zM9 5v14m4-14v14',
+  camera: 'M4 6h12v12H4zM16 10l5-3v10l-5-3M8 10h4v4H8z',
+};
+---
+<BaseLayout title={c.meta.title} description={c.meta.description} locale={c.locale} canonicalPath={c.locale === 'en' ? '/' : '/ru/'}>
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label={c.name}>{c.name}<span>.</span></a>
+    <button class="menu-button" aria-expanded="false" aria-controls="site-nav"><span class="sr-only">Menu</span><span></span><span></span></button>
+    <nav id="site-nav" aria-label="Main navigation">
+      {c.nav.map((label: string, i: number) => <a href={`#${navIds[i]}`}>{label}</a>)}
+    </nav>
+    <div class="language" aria-label="Language"><a href={withBase('/')} aria-current={c.locale === 'en' ? 'page' : undefined}>EN</a><span>/</span><a href={withBase('/ru/')} aria-current={c.locale === 'ru' ? 'page' : undefined}>RU</a></div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="hero-content wrap">
+        <div class="hero-copy">
+          <p class="eyebrow">{c.hero.eyebrow}</p>
+          <h1>{c.hero.name}</h1>
+          <p class="hero-tagline">{c.hero.tagline}</p>
+          <p class="hero-since">{c.hero.since}</p>
+          <div class="badges">{c.hero.badges.map((badge: string) => <span><i>✓</i>{badge}</span>)}</div>
+          <div class="hero-actions"><a class="button button-primary" href="#about">{c.hero.about}</a><a class="button button-secondary" href="#landlords">{c.hero.landlords}</a></div>
+        </div>
+        <figure class="hero-photo">
+          <div><img src={withBase(c.images.hero.src)} alt={c.images.hero.alt} style={`object-position:${c.images.hero.position}`} width="960" height="1280" fetchpriority="high" /></div>
+          <figcaption><i>Fig. 01</i> {c.locale === 'ru' ? 'Персей · на чемоданах' : 'Perseus · ready to go'}</figcaption>
+          <span class="coordinate">{c.locale === 'ru' ? 'ПЕРСИК · ФОТОАЛЬБОМ' : 'PERSIK · PHOTO ALBUM'}</span>
+        </figure>
+      </div>
+      <a class="scroll" href="#about"><span></span>{c.hero.scroll}</a>
+    </section>
+
+    <section id="about" class="section about wrap">
+      <div class="about-photo reveal"><img src={withBase(c.images.portrait.src)} alt={c.images.portrait.alt} style={`object-position:${c.images.portrait.position}`} width="960" height="1280" loading="lazy" /><span class="photo-caption">{c.locale === 'ru' ? 'ПОРТРЕТ 001 · ДОМА' : 'PORTRAIT 001 · AT HOME'}</span></div>
+      <div class="about-copy reveal">
+        <p class="eyebrow">{c.about.eyebrow}</p><h2>{c.about.title}</h2>
+        {c.about.paragraphs.map((p: string) => <p class="body-copy">{p}</p>)}
+        <div class="specimen"><header><span>{c.locale === 'ru' ? 'ЛИЧНОЕ ДЕЛО' : 'PROFILE'}</span><strong>{c.name} · {c.nickname}</strong></header><dl class="facts"><div><dt>{c.locale === 'ru' ? 'Возраст' : 'Age'}</dt><dd data-age-label data-locale={c.locale}>{ageLabel(c.locale)}</dd></div>{c.about.facts.map(([dt, dd]: [string, string]) => <div><dt>{dt}</dt><dd>{dd}</dd></div>)}</dl></div>
+      </div>
+    </section>
+
+    <section id="apartment" class="section apartment">
+      <div class="wrap"><div class="home-intro"><div class="section-heading reveal"><p class="eyebrow">{c.apartment.eyebrow}</p><h2>{c.apartment.title}</h2><p>{c.apartment.intro}</p></div><figure class="home-photo reveal"><img src={withBase(c.images.apartment.src)} alt={c.images.apartment.alt} style={`object-position:${c.images.apartment.position}`} loading="lazy"/><figcaption>{c.locale === 'ru' ? 'Персей · сон у окна' : 'Perseus · a nap by the window'}</figcaption></figure></div>
+        <div class="card-grid">{c.apartment.cards.map((card: any, i: number) => <article class="care-card reveal"><span class="number">0{i + 1}</span><span class="line-icon">{card.icon}</span><h3>{card.title}</h3><p>{card.text}</p></article>)}</div>
+      </div>
+    </section>
+
+    <section class="section setup wrap">
+      <div class="section-heading reveal"><p class="eyebrow">{c.setup.eyebrow}</p><h2>{c.setup.title}</h2><p>{c.setup.intro}</p></div>
+      <figure class="setup-photo reveal"><img src={withBase('/images/cat/perseus-travel-kit.webp')} alt={c.locale === 'ru' ? 'Переноска Персея и портативный лоток рядом' : 'Perseus’s carrier and portable litter box side by side'} width="1280" height="960" loading="lazy" /><figcaption>{c.locale === 'ru' ? 'Свой уголок в новом месте: переноска и портативный лоток.' : 'A familiar corner in a new place: his carrier and portable litter box.'}</figcaption></figure>
+      <div class="setup-list">{c.setup.items.map((item: string, i: number) => <div class="setup-item reveal"><svg viewBox="0 0 24 24" aria-hidden="true"><path d={iconPaths[setupIcons[i]]}/></svg><strong>{item}</strong><small>{c.locale === 'ru' ? 'С СОБОЙ' : 'PACKED'} · 0{i + 1}</small></div>)}</div>
+    </section>
+
+    <section id="health" class="section health">
+      <div class="wrap health-inner reveal"><div><p class="eyebrow">{c.health.eyebrow}</p><h2>{c.health.title}</h2><p>{c.health.intro}</p></div>
+        <ul>{c.health.statuses.map((s: string) => <li><span>✓</span>{s}</li>)}</ul>
+        <!-- Privacy: publish status labels only. Never upload full veterinary passport pages, document IDs, chip numbers, owner passport data, or addresses. -->
+        <aside><span>{c.locale === 'ru' ? 'ЗДОРОВЬЕ' : 'HEALTH'}</span><p>{c.health.note}</p></aside>
+      </div>
+    </section>
+
+    <section id="travels" class="section travels wrap">
+      <div class="section-heading reveal"><p class="eyebrow">{c.travels.eyebrow}</p><h2>{c.travels.title}</h2><p>{c.travels.intro}</p></div>
+
+      <div class="timeline">{c.travels.trips.map((trip: any, i: number) => <article class="trip reveal"><div class="trip-dot"></div><img src={withBase(trip.image)} alt={trip.note} width="640" height="430" loading="lazy" /><div class="trip-copy"><span>{trip.type}</span><h3>{trip.city}</h3><p>“{trip.note}”</p></div><b>0{i + 1}</b></article>)}</div>
+    </section>
+
+    <section class="section gallery">
+      <div class="wrap"><div class="section-heading reveal"><p class="eyebrow">{c.gallery.eyebrow}</p><h2>{c.gallery.title}</h2></div></div>
+      <div class="gallery-grid">{c.gallery.images.map((item: any, i: number) => <button class={`gallery-item item-${i + 1}`} data-gallery-index={i} aria-label={`${c.locale === 'ru' ? 'Открыть' : 'Open'}: ${item.caption}`}><img src={withBase(item.src)} alt={item.alt} width="960" height="1280" loading="lazy" /><span>{item.caption}</span></button>)}</div>
+    </section>
+
+    <section id="landlords" class="section landlords">
+      <div class="wrap landlord-card reveal"><div class="landlord-copy"><p class="eyebrow">{c.landlords.eyebrow}</p><h2>{c.landlords.title}</h2>{c.landlords.paragraphs.map((p: string, i: number) => <p class={i === 1 ? 'responsibility' : undefined}>{p}</p>)}<a class="button button-primary" href="#contact">{c.landlords.cta}</a></div><ul>{c.landlords.checklist.map((item: string) => <li><span>✓</span>{item}</li>)}</ul></div>
+    </section>
+
+    <section class="section faq wrap">
+      <div class="section-heading reveal"><p class="eyebrow">{c.faq.eyebrow}</p><h2>{c.faq.title}</h2></div>
+      <div class="faq-list">{c.faq.items.map((item: any, i: number) => <details class="reveal" open={i === 0}><summary>{item.q}<span></span></summary><p>{item.a}</p></details>)}</div>
+    </section>
+
+    <section id="contact" class="contact"><div class="contact-inner wrap reveal"><p class="eyebrow light">{c.contact.eyebrow}</p><h2>{c.contact.title}</h2><p>{c.contact.text}</p></div></section>
+  </main>
+  <footer><div class="wrap"><div><a class="brand" href="#top">{c.name}<span>.</span></a><p>Felis catus · Travel companion<br/>{c.footer}</p></div><div class="footer-links"><span>© 2026</span></div></div></footer>
+
+  <dialog class="lightbox" aria-label="Travel photo viewer"><button class="lightbox-close" aria-label="Close">×</button><button class="lightbox-prev" aria-label="Previous photo">←</button><figure><img src="" alt="" /><figcaption></figcaption></figure><button class="lightbox-next" aria-label="Next photo">→</button></dialog>
+
+  <script>
+    import { ageLabel } from '../data/profile';
+    function updateAge() {
+      document.querySelectorAll<HTMLElement>('[data-age-label]').forEach((element) => {
+        element.textContent = ageLabel(element.dataset.locale === 'ru' ? 'ru' : 'en');
+      });
+    }
+    updateAge();
+    document.addEventListener('visibilitychange', updateAge);
+    window.setInterval(updateAge, 60_000);
+  </script>
+
+  <script define:vars={{ gallery }}>
+    const menu = document.querySelector('.menu-button');
+    const nav = document.querySelector('#site-nav');
+    menu?.addEventListener('click', () => { const open = menu.getAttribute('aria-expanded') === 'true'; menu.setAttribute('aria-expanded', String(!open)); nav?.classList.toggle('open', !open); });
+    nav?.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => { menu?.setAttribute('aria-expanded', 'false'); nav.classList.remove('open'); }));
+    document.querySelectorAll('.language a').forEach((a) => a.addEventListener('click', () => { if (location.hash) a.setAttribute('href', a.getAttribute('href') + location.hash); }));
+    const dialog = document.querySelector('.lightbox'); const lbImg = dialog?.querySelector('img'); const caption = dialog?.querySelector('figcaption'); let current = 0;
+    const show = (index) => { current = (index + gallery.length) % gallery.length; lbImg.src = gallery[current].src; lbImg.alt = gallery[current].alt; caption.textContent = gallery[current].caption; };
+    document.querySelectorAll('[data-gallery-index]').forEach((button) => button.addEventListener('click', () => { show(Number(button.dataset.galleryIndex)); dialog.showModal(); }));
+    dialog?.querySelector('.lightbox-close')?.addEventListener('click', () => dialog.close()); dialog?.querySelector('.lightbox-prev')?.addEventListener('click', () => show(current - 1)); dialog?.querySelector('.lightbox-next')?.addEventListener('click', () => show(current + 1));
+    dialog?.addEventListener('click', (e) => { if (e.target === dialog) dialog.close(); }); dialog?.addEventListener('keydown', (e) => { if (e.key === 'ArrowLeft') show(current - 1); if (e.key === 'ArrowRight') show(current + 1); });
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) { const observer = new IntersectionObserver((entries) => entries.forEach((e) => e.isIntersecting && e.target.classList.add('visible')), { threshold: .12 }); document.querySelectorAll('.reveal').forEach((el) => observer.observe(el)); } else document.querySelectorAll('.reveal').forEach((el) => el.classList.add('visible'));
+  </script>
+</BaseLayout>

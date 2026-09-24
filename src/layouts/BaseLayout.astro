@@ -1,0 +1,25 @@
+---
+import '../styles/global.css';
+import { withBase } from '../utils/paths';
+const { title, description, locale, canonicalPath } = Astro.props;
+const canonical = new URL(withBase(canonicalPath), Astro.site);
+---
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#f7f1e7" />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href={withBase('/favicon.svg')} type="image/svg+xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL(withBase('/images/cat/perseus-suitcase.webp'), Astro.site)} />
+    <meta property="og:locale" content={locale === 'ru' ? 'ru_RU' : 'en_US'} />
+    <title>{title}</title>
+  </head>
+  <body><slot /></body>
+</html>

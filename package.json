@@ -1,0 +1,18 @@
+{
+  "name": "murr-travel-profile",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "ASTRO_TELEMETRY_DISABLED=1 astro dev",
+    "build": "ASTRO_TELEMETRY_DISABLED=1 astro build",
+    "preview": "ASTRO_TELEMETRY_DISABLED=1 astro preview",
+    "test:pages": "node scripts/check-pages.mjs"
+  },
+  "dependencies": {
+    "astro": "5.13.5"
+  },
+  "devDependencies": {
+    "typescript": "5.9.2"
+  }
+}
