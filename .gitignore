@@ -1,0 +1,24 @@
+node_modules/
+dist/
+dist-pages-check-*/
+.astro/
+.DS_Store
+
+# Local configuration, credentials, logs, and caches
+.env
+.env.*
+!.env.example
+!.env.sample
+*.log
+.cache/
+coverage/
+*.tsbuildinfo
+.idea/
+.vscode/
+
+# Local photo originals and working notes
+/data/images/
+
+# Unused demo assets retained locally
+/public/images/cat/murr-*
+/public/images/travel/
