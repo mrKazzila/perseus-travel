@@ -17,32 +17,40 @@ English and Russian content lives in `src/data/site.ts`; age calculation uses `s
 
 ## GitHub Pages
 
-The `GitHub Pages` workflow checks both site modes on pull requests. Pushes to
-`main` and manual runs from `main` also publish the selected mode. It uses Node.js
-22 and `npm ci`; keep `package-lock.json` in the repository.
+The `GitHub Pages` workflow checks both site modes on pull requests and pushes to
+`main`. Publication happens only through a manual run from `main`, after the
+checks pass. It uses Node.js 22 and `npm ci`; keep `package-lock.json` in the
+repository.
 
 ### First deployment
 
 1. Push the project files and `.github/workflows/pages.yml` to GitHub.
 2. Open **Settings → Pages → Build and deployment → Source** and select
    **GitHub Actions**.
-3. Open **Actions → GitHub Pages → Run workflow**, select `main`, and run it.
+3. Open **Actions → GitHub Pages → Run workflow**, select `main`, choose the
+   checkbox state described below, and run it.
    The workflow's deployment environment shows the resulting site URL.
 
-The initial deployment is a blank page. To show the full site, open
-**Settings → Secrets and variables → Actions → Variables**, add a **repository
-variable** named `SITE_ENABLED`, and set its value to `true`. Then run the workflow
-again from `main`.
+### Switch between the full site and the blank page
 
-| `SITE_ENABLED` repository variable | Published content |
+Open **Actions → GitHub Pages → Run workflow** and select `main`. Use the
+**Показать основной сайт (выключено — пустая страница)** checkbox:
+
+| Checkbox | Published content |
 | --- | --- |
-| `true` | Full English and Russian site |
-| `false` or missing | Empty neutral background, with no text or photographs |
-| Any other value | Build fails; the previous deployment stays published |
+| Checked | Full English and Russian site |
+| Unchecked (default) | Empty neutral background, with no text or photographs |
 
-Changing the variable does not trigger a workflow. Run it manually or push to
-`main` to apply the new setting. The mode persists across subsequent deployments.
-Leave GitHub Pages itself enabled so it can serve the blank page.
+Click **Run workflow** to publish the chosen mode. The checkbox defaults to off
+each time; it does not display the currently published mode. Pushes only run
+checks and leave the published site unchanged. To publish new code or change
+modes, run the workflow manually again. A failed build leaves the previous
+deployment published.
+
+The `SITE_ENABLED` repository variable is no longer used and may be deleted.
+Leave GitHub Pages itself enabled so it can serve the blank page. The workflow
+passes the checkbox value to the build as the `SITE_ENABLED` environment variable;
+local build commands below continue to work as before.
 
 The blank build contains only `/`, `/ru/`, a blank `404.html`, and `robots.txt`.
 It excludes the full site's photos, scripts, and metadata and requests no indexing.

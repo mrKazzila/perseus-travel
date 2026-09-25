@@ -6,6 +6,12 @@ on:
   pull_request:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      site_enabled:
+        description: 'Показать основной сайт (выключено — пустая страница)'
+        type: boolean
+        default: false
+        required: true
 
 permissions:
   contents: read
@@ -26,7 +32,7 @@ jobs:
   publish:
     name: Publish selected mode
     needs: check
-    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -39,7 +45,7 @@ jobs:
       group: github-pages
       cancel-in-progress: false
     env:
-      SITE_ENABLED: ${{ vars.SITE_ENABLED || 'false' }}
+      SITE_ENABLED: ${{ inputs.site_enabled && 'true' || 'false' }}
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-node@v6
