@@ -1,7 +1,6 @@
-// Set the confirmed birth date (YYYY-MM-DD) to enable birthday-based updates.
-// An age alone cannot establish an exact birthday.
+// Birth date confirmed by the owner; stored as YYYY-MM-DD.
 export const profile = {
-  birthDate: null as string | null,
+  birthDate: '2018-05-29' as string | null,
   confirmedAge: 8,
   confirmedOn: '2026-09-24',
 };
