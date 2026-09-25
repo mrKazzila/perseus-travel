@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
     inputs:
       site_enabled:
-        description: 'Показать основной сайт (выключено — пустая страница)'
+        description: 'Показать основной сайт (выключено — поиск жилья на паузе)'
         type: boolean
         default: false
         required: true

@@ -31,15 +31,15 @@ repository.
    checkbox state described below, and run it.
    The workflow's deployment environment shows the resulting site URL.
 
-### Switch between the full site and the blank page
+### Switch between the full site and the paused page
 
 Open **Actions → GitHub Pages → Run workflow** and select `main`. Use the
-**Показать основной сайт (выключено — пустая страница)** checkbox:
+**Показать основной сайт (выключено — поиск жилья на паузе)** checkbox:
 
 | Checkbox | Published content |
 | --- | --- |
 | Checked | Full English and Russian site |
-| Unchecked (default) | Empty neutral background, with no text or photographs |
+| Unchecked (default) | Centered cat animation and a message that housing is not currently needed |
 
 Click **Run workflow** to publish the chosen mode. The checkbox defaults to off
 each time; it does not display the currently published mode. Pushes only run
@@ -48,13 +48,16 @@ modes, run the workflow manually again. A failed build leaves the previous
 deployment published.
 
 The `SITE_ENABLED` repository variable is no longer used and may be deleted.
-Leave GitHub Pages itself enabled so it can serve the blank page. The workflow
+Leave GitHub Pages itself enabled so it can serve the paused page. The workflow
 passes the checkbox value to the build as the `SITE_ENABLED` environment variable;
 local build commands below continue to work as before.
 
-The blank build contains only `/`, `/ru/`, a blank `404.html`, and `robots.txt`.
+The paused build contains `/`, `/ru/`, `404.html`, `robots.txt`, and the cat animation assets.
 It excludes the full site's photos, scripts, and metadata and requests no indexing.
-Edit `maintenance/Blank.astro` when the replacement content is ready.
+Edit `maintenance/Blank.astro` to update the bilingual pause message and layout.
+The animation in `maintenance/public/images/resting-cat.gif` uses the four source
+frames in `data/gif/`, at 0.8 seconds per frame. A static WebP is used when the
+visitor prefers reduced motion.
 
 The workflow takes the origin and base path from GitHub Pages, including the
 repository subpath. Canonical URLs, social images, `robots.txt`, and the sitemap
@@ -62,7 +65,7 @@ are generated from those settings.
 
 ### Local checks
 
-Local development and builds show the full site by default. To preview a blank
+Local development and builds show the full site by default. To preview a paused
 build, use the same environment setting for both commands:
 
 ```bash
