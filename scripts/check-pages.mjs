@@ -73,7 +73,7 @@ try {
   // Reuse the previous output to ensure switching off also removes old assets.
   for (const [base, mode] of [['/', 'false'], ['/perseus-travel/', 'false'], ['/perseus-travel/', undefined]]) {
     successfulBuild(base, mode);
-    assert.deepEqual(readdirSync(output).sort(), ['404.html', 'images', 'index.html', 'robots.txt', 'ru']);
+    assert.deepEqual(readdirSync(output).sort(), ['404.html', 'favicon.svg', 'images', 'index.html', 'robots.txt', 'ru']);
     assert.deepEqual(readdirSync(join(output, 'ru')), ['index.html']);
     for (const path of ['index.html', 'ru/index.html', '404.html']) {
       const html = read(path);
@@ -83,9 +83,11 @@ try {
       assert.ok(html.includes(`srcset="${base}images/resting-cat.webp"`));
       assert.match(html, /prefers-reduced-motion: reduce/);
       assert.match(html, /name="robots" content="noindex, nofollow"/);
-      assert.doesNotMatch(html, /<script|<link|site-header|og:image/);
+      assert.ok(html.includes(`<link rel="icon" href="${base}favicon.svg" type="image/svg+xml">`));
+      assert.doesNotMatch(html, /<script|site-header|og:image/);
     }
     assert.deepEqual(readdirSync(join(output, 'images')).sort(), ['resting-cat.gif', 'resting-cat.webp']);
+    assert.equal(read('favicon.svg'), readFileSync(join(root, 'public/favicon.svg'), 'utf8'));
     assert.equal(readFileSync(join(output, 'images/resting-cat.gif')).subarray(0, 6).toString(), 'GIF89a');
     assert.equal(read('robots.txt'), 'User-agent: *\nDisallow: /\n');
     console.log(`PASS: paused site at ${base} with SITE_ENABLED=${mode ?? '(unset in CI)'}`);
