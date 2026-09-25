@@ -1,5 +1,15 @@
 ---
 const { locale = 'en' } = Astro.props;
+const copy = locale === 'ru' ? {
+  title: 'Сейчас жильё не ищем',
+  text: 'Персей отдыхает, а поиск дома — на паузе.',
+  alt: 'Рыжий кот спит у солнечного окна рядом с чемоданом',
+} : {
+  title: 'We’re not looking for a home right now',
+  text: 'Perseus is resting, and the house hunt is on pause.',
+  alt: 'A ginger cat sleeping by a sunny window beside a suitcase',
+};
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 ---
 <!doctype html>
 <html lang={locale}>
@@ -7,8 +17,34 @@ const { locale = 'en' } = Astro.props;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="robots" content="noindex, nofollow" />
-    <title></title>
-    <style is:inline>html, body { margin: 0; min-height: 100vh; background: #f7f1e7; }</style>
+    <title>{copy.title}</title>
+    <style is:inline>
+      * { box-sizing: border-box; }
+      html { background: #f7f1e7; color: #493b30; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        min-height: 100svh;
+        display: grid;
+        place-items: center;
+        padding: 32px 20px;
+        font-family: system-ui, sans-serif;
+        text-align: center;
+      }
+      main { width: min(100%, 640px); }
+      img { display: block; width: 100%; height: auto; border-radius: 24px; }
+      h1 { margin: 28px 0 12px; font-size: clamp(1.5rem, 4vw, 2rem); line-height: 1.25; font-weight: 600; }
+      p { margin: 0; color: #756354; font-size: 1rem; line-height: 1.6; }
+    </style>
   </head>
-  <body></body>
+  <body>
+    <main>
+      <picture>
+        <source media="(prefers-reduced-motion: reduce)" srcset={`${base}images/resting-cat.webp`} />
+        <img src={`${base}images/resting-cat.gif`} width="959" height="540" alt={copy.alt} />
+      </picture>
+      <h1>{copy.title}</h1>
+      <p>{copy.text}</p>
+    </main>
+  </body>
 </html>

@@ -30,7 +30,7 @@ const read = (path) => readFileSync(join(output, path), 'utf8');
 
 try {
   assert.equal(siteEnabled({}), true, 'Local development defaults to the full site');
-  assert.equal(siteEnabled({ CI: 'true' }), false, 'CI defaults to the blank site');
+  assert.equal(siteEnabled({ CI: 'true' }), false, 'CI defaults to the paused site');
   assert.equal(siteEnabled({ SITE_ENABLED: 'true', CI: 'true' }), true);
   assert.equal(siteEnabled({ SITE_ENABLED: 'false' }), false);
   for (const value of ['', 'TRUE', 'yes', '0']) {
@@ -71,18 +71,24 @@ try {
   }
 
   // Reuse the previous output to ensure switching off also removes old assets.
-  for (const mode of ['false', undefined]) {
-    successfulBuild('/perseus-travel/', mode);
-    assert.deepEqual(readdirSync(output).sort(), ['404.html', 'index.html', 'robots.txt', 'ru']);
+  for (const [base, mode] of [['/', 'false'], ['/perseus-travel/', 'false'], ['/perseus-travel/', undefined]]) {
+    successfulBuild(base, mode);
+    assert.deepEqual(readdirSync(output).sort(), ['404.html', 'images', 'index.html', 'robots.txt', 'ru']);
     assert.deepEqual(readdirSync(join(output, 'ru')), ['index.html']);
     for (const path of ['index.html', 'ru/index.html', '404.html']) {
       const html = read(path);
-      assert.match(html, /<body>\s*<\/body>/);
+      assert.match(html, /<main>/);
+      assert.ok(html.includes(path === 'ru/index.html' ? 'Сейчас жильё не ищем' : 'We’re not looking for a home right now'));
+      assert.ok(html.includes(`src="${base}images/resting-cat.gif"`));
+      assert.ok(html.includes(`srcset="${base}images/resting-cat.webp"`));
+      assert.match(html, /prefers-reduced-motion: reduce/);
       assert.match(html, /name="robots" content="noindex, nofollow"/);
-      assert.doesNotMatch(html, /<script|<img|<link|Perseus|Персей|og:image/);
+      assert.doesNotMatch(html, /<script|<link|site-header|og:image/);
     }
+    assert.deepEqual(readdirSync(join(output, 'images')).sort(), ['resting-cat.gif', 'resting-cat.webp']);
+    assert.equal(readFileSync(join(output, 'images/resting-cat.gif')).subarray(0, 6).toString(), 'GIF89a');
     assert.equal(read('robots.txt'), 'User-agent: *\nDisallow: /\n');
-    console.log(`PASS: blank site with SITE_ENABLED=${mode ?? '(unset in CI)'}`);
+    console.log(`PASS: paused site at ${base} with SITE_ENABLED=${mode ?? '(unset in CI)'}`);
   }
 
   successfulBuild('/', undefined, '');
