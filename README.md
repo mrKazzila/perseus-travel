@@ -1,6 +1,6 @@
-# Perseus (Persik) — Traveling Cat Profile
+# Perseus — Traveling Cat Profile
 
-A bilingual, privacy-friendly static profile for a cat who travels with his owners. Built for hosts and landlords first, with a small travel journal ready to grow over time.
+A bilingual static cat profile for hosts and landlords, with a travel journal.
 
 ## Run locally
 
@@ -13,7 +13,7 @@ Create a production build with `npm run build`; output is written to `dist/`.
 
 ## Editing content
 
-All English and Russian copy, profile facts, health statuses, equipment, trips, FAQ items, and landlord information live in `src/data/site.ts`. The two routes (`/` and `/ru/`) render the same component, so structure and behavior stay consistent.
+English and Russian content lives in `src/data/site.ts`; age calculation uses `src/data/profile.ts`. Both routes (`/` and `/ru/`) share the same component.
 
 ## GitHub Pages
 
@@ -79,18 +79,10 @@ Checks use temporary build output and do not replace `dist/`.
 
 ## Replacing photos
 
-Original photos are kept locally in `data/images/pers/` and excluded from Git along with working notes in `data/images/`. Optimized copies use descriptive, consistent names in `public/images/cat/perseus-*.webp`. The 12 current photos are converted with orientation correction, metadata removal and WebP quality 82; the longest edge is capped at 1600 pixels without upscaling. Gallery dimensions match each image so the full photo is shown. The site uses real photos for the hero, portrait, home life, equipment, travel moments and gallery; locations and dates are not inferred from the filenames.
+Original photos in `data/images/pers/` are excluded from Git. Optimized copies live in `public/images/cat/perseus-*.webp`: correct orientation, strip metadata, use WebP quality 82, and cap the longest edge at 1600 pixels without upscaling.
 
-Image paths, translated captions, alt text and crop positions live in `src/data/site.ts`. Unused demo images are excluded from Git; local copies may remain in the workspace. Astro copies all files in `public/` into full-site builds, so remove local demo assets from `public/` before manually publishing a local build.
-
-## Age and details to confirm
-
-`src/data/profile.ts` holds the confirmed birthday, 29 May 2018 (`2018-05-29`). Age is calculated at build time and refreshed in the browser, including when the page regains visibility. The next increase is on 29 May 2027, when Perseus turns 9.
-
-Equipment dimensions (length × width × height): portable litter box 45 × 36 × 15 cm; carrier approximately 40 × 30 × 30 cm. The owner noted that the carrier dimensions may vary (for example, 44 × 28 × 25 cm), so the site marks them as approximate. Still needed from the owner: camera model and purpose.
+Update image paths, captions, alt text, dimensions, and crop positions in `src/data/site.ts`. Astro copies all files in `public/` into full-site builds, so remove any local demo assets before publishing a local build.
 
 ## Privacy
 
-The site uses no analytics, trackers, external fonts, cookies, APIs, backend, CMS, or authentication. Only general health statuses are shown. Do not publish full veterinary passport pages, document numbers, full microchip numbers, owner IDs, addresses, or real contact details unless you explicitly intend to make them public.
-
-The contact section invites readers to reply in the conversation where this profile was shared; no demo Telegram or email links are shown.
+The site uses no analytics, trackers, external fonts, or cookies. Keep private documents, identifiers, addresses, and contact details out of published content.
