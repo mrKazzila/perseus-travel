@@ -79,15 +79,15 @@ Checks use temporary build output and do not replace `dist/`.
 
 ## Replacing photos
 
-Original photos are kept locally in `data/images/pers/` and excluded from Git along with working notes in `data/images/`. Optimized copies use descriptive, consistent names in `public/images/cat/perseus-*.webp`. All 12 photos were converted with orientation correction, metadata removal and WebP quality 82. The site uses real photos for the hero, portrait, home life, equipment, travel moments and gallery; locations and dates are not inferred from the filenames.
+Original photos are kept locally in `data/images/pers/` and excluded from Git along with working notes in `data/images/`. Optimized copies use descriptive, consistent names in `public/images/cat/perseus-*.webp`. The 12 current photos are converted with orientation correction, metadata removal and WebP quality 82; the longest edge is capped at 1600 pixels without upscaling. Gallery dimensions match each image so the full photo is shown. The site uses real photos for the hero, portrait, home life, equipment, travel moments and gallery; locations and dates are not inferred from the filenames.
 
 Image paths, translated captions, alt text and crop positions live in `src/data/site.ts`. Unused demo images are excluded from Git; local copies may remain in the workspace. Astro copies all files in `public/` into full-site builds, so remove local demo assets from `public/` before manually publishing a local build.
 
 ## Age and details to confirm
 
-`src/data/profile.ts` holds the confirmed age (8 as of September 2026) and an optional `birthDate` in `YYYY-MM-DD` format. Once the actual birthday is supplied, set `birthDate`: age is calculated at build time and refreshed in the browser, including when the page regains visibility. Until then, the dated confirmed age is displayed without inventing a birthday.
+`src/data/profile.ts` holds the confirmed birthday, 29 May 2018 (`2018-05-29`). Age is calculated at build time and refreshed in the browser, including when the page regains visibility. The next increase is on 29 May 2027, when Perseus turns 9.
 
-Still needed from the owner: the birthday, carrier and portable litter box dimensions (length × width × height), and camera model and purpose. These details are not guessed from the photos.
+Equipment dimensions (length × width × height): portable litter box 45 × 36 × 15 cm; carrier approximately 40 × 30 × 30 cm. The owner noted that the carrier dimensions may vary (for example, 44 × 28 × 25 cm), so the site marks them as approximate. Still needed from the owner: camera model and purpose.
 
 ## Privacy
 
